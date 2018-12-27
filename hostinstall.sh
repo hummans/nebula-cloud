@@ -1,9 +1,7 @@
 #!/bin/bash
 
-
 source settings.sh
 source common.sh
-
 
 # Set root's full name (kvuli mailum)
 root_full_name="Nebula Cloud ($(hostname))"
@@ -18,7 +16,14 @@ function install_base {
         aptitude \
         dirmngr \
         apt-transport-https \
+        python3 \
+        python3-pip \
+        cifs-utils \
+        python3-dev \
+        build-essential \
         linux-headers-$(uname -r) || return 1
+
+    pip3 install pylibmc psutil psycopg2-binary pyyaml requests || return 1
 }
 
 
@@ -48,7 +53,6 @@ function install_mail {
 }
 
 
-# Preinstaluje mdadm tak, aby posilal maily
 function install_mdadm {
     apt -y remove --purge mdadm
     debconf-set-selections <<< "mdadm mdadm/mail_to string $support_email"
@@ -61,7 +65,6 @@ function install_mdadm {
 function install_virtualbox {
     wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | apt-key add - || return 1
     wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | apt-key add - || return 1
-
     echo "deb https://download.virtualbox.org/virtualbox/debian $debian_version contrib" > /etc/apt/sources.list.d/virtualbox.list
     apt update || return 1
     apt -y install virtualbox-5.2 || return 1
@@ -87,6 +90,7 @@ function install_ansible {
     apt -y install ansible || return 1
 }
 
+
 function install_postgres {
     echo "deb http://apt.postgresql.org/pub/repos/apt/ $debian_version-pgdg main" > /etc/apt/sources.list.d/pgdg.list
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - || return 1
@@ -97,6 +101,7 @@ function install_postgres {
         postgresql-contrib-11 || return 1
 }
 
+
 function install_memcached {
     apt -y install memcached || return 1
     echo "-d" > /etc/memcached.conf
@@ -106,6 +111,7 @@ function install_memcached {
     echo "-u memcache" >> /etc/memcached.conf
     systemctl restart memcached || return 1
 }
+
 
 function install_nginx {
     cd /opt
@@ -133,7 +139,6 @@ function install_certbot {
         git clone https://github.com/immstudios/domain-tool || return 1
         cd domain-tool
     fi
-
     domains_list=$(IFS=, ; echo "${domains[*]}")
     echo "domains = ${domains_list}" > /opt/domain-tool/config/$site_url
     echo "rsa-key-size = 4096" >> /opt/domain-tool/config/$site_url
@@ -146,6 +151,18 @@ function install_certbot {
 }
 
 
+function install_nebula_setup {
+    cd /opt
+    if [ -d nebula-setup ]; then
+        cd nebula-setup
+        git pull || return 1
+    else
+        git clone https://github.com/nebulabroadcast/nebula-setup || return 1
+    fi
+}
+
+
+install_base || critical_error
 install_mail || critical_error
 install_virtualbox || critical_error
 install_vagrant || critical_error
@@ -154,3 +171,6 @@ install_postgres || critical_error
 install_memcached || critical_error
 install_nginx || critical_error
 install_certbot || critical_error
+install_nebula_setup || critical_error
+
+cd $orig_dir
