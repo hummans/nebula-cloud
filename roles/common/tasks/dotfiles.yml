@@ -1,0 +1,11 @@
+---
+
+- name: Download dotfiles
+  git:
+    repo: https://github.com/martastain/dotfiles
+    dest: ~/dotfiles
+  register: dotfiles
+
+- name: Deploy dotfiles
+  command: ~/dotfiles/deploy.sh chdir=~/dotfiles
+  when: dotfiles.changed

@@ -1,0 +1,32 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require_relative 'settings.rb'
+include VagrantSettings
+
+Vagrant.configure(2) do |config|
+
+    config.vm.hostname = HOSTNAME
+    config.vm.define HOSTNAME
+    config.vm.network "public_network", ip: IP
+
+    config.vm.box = "debian/stretch64"
+
+    config.vm.provider "virtualbox" do |vb|
+        vb.name = HOSTNAME
+        vb.gui = false
+        vb.cpus = CPUS
+        vb.memory = MEMORY
+    end
+
+    config.vm.provision "shell",
+        run:    "always",
+        inline: "ip route add 224.0.0.0/4 dev eth1 || echo route exist"
+
+    config.vm.provision :ansible do |ansible|
+        ansible.verbose = "v"
+        ansible.playbook = "playbook.yml"
+        ansible.host_key_checking = false
+    end
+
+end

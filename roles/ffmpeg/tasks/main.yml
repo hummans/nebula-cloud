@@ -1,0 +1,11 @@
+---
+
+- name: Check is ffmpeg installed
+  shell: command -v ffmpeg >/dev/null 2>&1
+  register: is_ffmpeg_exist
+  ignore_errors: yes
+
+
+- name: Install ffmpeg
+  command: /opt/installers/install.ffmpeg.sh
+  when: is_ffmpeg_exist is failed

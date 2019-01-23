@@ -1,0 +1,16 @@
+---
+
+- name: Hub service
+  template:
+    src: nebula-hub.service
+    dest: /etc/systemd/system/nebula-hub.service
+
+- name: Enable Hub service
+  systemd:
+    name: nebula-hub
+    enabled: true
+
+- name: Restart hub
+  systemd:
+    name: nebula-hub
+    state: restarted

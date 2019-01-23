@@ -1,0 +1,13 @@
+[Unit]
+Description=Nebula broadcast automation system
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/nebula
+ExecStart=/opt/nebula/nebula.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

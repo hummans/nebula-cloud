@@ -125,7 +125,7 @@ function install_nginx {
     ./install.nginx.sh || return 1
 
     rm -rf /var/www/default
-    ln -s $base_dir/var/www/default /var/www/default
+    ln -s $base_dir/support/www /var/www/nebula-cloud
 }
 
 
@@ -139,14 +139,6 @@ function install_certbot {
         git clone https://github.com/immstudios/domain-tool || return 1
         cd domain-tool
     fi
-    domains_list=$(IFS=, ; echo "${domains[*]}")
-    echo "domains = ${domains_list}" > /opt/domain-tool/config/$site_url
-    echo "rsa-key-size = 4096" >> /opt/domain-tool/config/$site_url
-    echo "email = ${support_email}" >> /opt/domain-tool/config/$site_url
-    echo "text = true" >> /opt/domain-tool/config/$site_url
-    echo "authenticator = webroot" >> /opt/domain-tool/config/$site_url
-    echo "webroot-path = /var/www/default/lets-encrypt" >> /opt/domain-tool/config/$site_url
-
     ./install.sh || return 1
 }
 

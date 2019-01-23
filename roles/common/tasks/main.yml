@@ -1,0 +1,9 @@
+---
+
+- name: set timezone to Europe/Prague
+  timezone:
+    name: Europe/Prague
+
+- include: tasks/packages.yml
+- include: tasks/dotfiles.yml
+- include: tasks/installers.yml

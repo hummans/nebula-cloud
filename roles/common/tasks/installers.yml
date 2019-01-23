@@ -1,0 +1,4 @@
+- name: Download imm installers
+  git: repo=https://github.com/immstudios/installers dest=/opt/installers
+  register: installers
+

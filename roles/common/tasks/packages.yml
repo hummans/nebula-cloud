@@ -1,0 +1,21 @@
+---
+
+- name: Update apt cache
+  apt: update_cache=yes
+
+- name: Install base packages
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+        - curl
+        - htop
+        - mc
+        - vim
+        - git
+        - screen
+        - nload
+  become: true
+  become_user: root
+  become_method: sudo
+

@@ -1,0 +1,12 @@
+---
+
+- name: Install Hub modules
+  pip:
+    executable: pip3
+    name: "{{ modules }}"
+  vars:
+      modules:
+        - cherrypy
+        - jinja2
+        - htmlmin
+

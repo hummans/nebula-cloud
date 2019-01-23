@@ -1,0 +1,44 @@
+---
+
+- name: Download nebula
+  git:
+    repo: https://github.com/nebulabroadcast/nebula
+    dest: /opt/nebula
+  register: nebula
+
+- name: Assume Nebula settings unchanged
+  shell: git update-index --assume-unchanged settings.json
+  args:
+    chdir: /opt/nebula
+
+- name: Execute nebula make
+  shell: make
+  args:
+    chdir: /opt/nebula
+
+- name: Update rex modules
+  shell: ./nebula.py --rex-update
+  args:
+    chdir: /opt/nebula
+
+- name: Nebula settings file
+  template:
+    src: settings.json
+    dest: /opt/nebula/settings.json
+
+- name: Nebula service
+  template:
+    src: nebula.service
+    dest: /etc/systemd/system/nebula.service
+
+- name: Enable Nebula service
+  systemd:
+    name: nebula
+    enabled: true
+
+- name: Restart nebula
+  systemd:
+    name: nebula
+    state: restarted
+  when: nebula.changed
+

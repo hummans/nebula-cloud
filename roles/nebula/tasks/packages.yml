@@ -1,0 +1,31 @@
+---
+
+- name: Install nebula packages
+  apt:
+    name: "{{ packages }}"
+  vars:
+      packages:
+        - libmemcached-dev
+        - python3-pip
+        - cifs-utils
+        - zlib1g-dev
+        - python3-dev
+        - build-essential
+        - python-setuptools
+        - python3-setuptools
+
+- name: Install python modules
+  pip:
+    executable: pip3
+    name: "{{ modules }}"
+  vars:
+      modules:
+        - pylibmc
+        - psutil
+        - psycopg2-binary
+        - pyyaml
+        - requests
+        - cherrypy
+        - jinja2
+        - htmlmin
+

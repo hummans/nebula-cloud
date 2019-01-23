@@ -16,11 +16,12 @@ mail_host="smtp.example.com"
 mail_user="smtpuser"
 mail_pass="smtppassword"
 support_email="support@example.com"
+host_ip="192.168.1.1" # IP address of the host
 ```
 
 ## sites directory
 
-Create subdirectory for each site (name of this subdirectory will be used as "site_name") 
+Create subdirectory for each site (name of this subdirectory will be used as "site_name")
 and put template dir (see nebula-setup) here:
 
 ```
