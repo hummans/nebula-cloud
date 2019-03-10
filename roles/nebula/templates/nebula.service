@@ -6,6 +6,7 @@ After=network.target
 Type=simple
 User=root
 WorkingDirectory=/opt/nebula
+ExecStartPre=/bin/sleep 30
 ExecStart=/opt/nebula/nebula.py
 Restart=on-failure
 

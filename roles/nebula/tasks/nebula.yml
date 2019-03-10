@@ -2,14 +2,9 @@
 
 - name: Download nebula
   git:
-    repo: https://github.com/nebulabroadcast/nebula
+    repo: https://github.com/immstudios/nebula
     dest: /opt/nebula
   register: nebula
-
-- name: Assume Nebula settings unchanged
-  shell: git update-index --assume-unchanged settings.json
-  args:
-    chdir: /opt/nebula
 
 - name: Execute nebula make
   shell: make
@@ -24,7 +19,7 @@
 - name: Nebula settings file
   template:
     src: settings.json
-    dest: /opt/nebula/settings.json
+    dest: /etc/nebula.json
 
 - name: Nebula service
   template:

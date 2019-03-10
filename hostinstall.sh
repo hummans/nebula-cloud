@@ -99,6 +99,11 @@ function install_postgres {
         postgresql-11 \
         postgresql-client-11 \
         postgresql-contrib-11 || return 1
+
+    echo "SHELL=/bin/bash" > /etc/cron.d/db_backup
+    echo "PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin" >> /etc/cron.d/db_backup
+    echo "0 */6 * * * root /opt/nebula-cloud/db_backup.sh" >> /etc/cron.d/db_backup
+
 }
 
 
