@@ -6,13 +6,17 @@ temp_dir=/tmp/$(basename "${BASH_SOURCE[0]}")
 debian_version="$(lsb_release --codename | cut -f2)"
 
 function critical_error {
-    printf "\n\033[0;31mInstallation failed\033[0m\n"
+    if [ -z $1 ]; then
+        printf "\n\033[0;31mCritical error\033[0m\n"
+    else
+        printf "\n\033[0;31mCritical error:\033[0m $1\n"
+    fi
     cd $orig_dir
     exit 1
 }
 
 function finished {
-    printf "\n\033[0;92mInstallation completed\033[0m\n"
+    printf "\n\033[0;92mTask completed\033[0m\n"
     cd $orig_dir
     exit 0
 }
