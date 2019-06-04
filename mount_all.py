@@ -52,11 +52,12 @@ for f in os.listdir(sites_dir):
 
 
 for site in sites:
+    stripname = site.replace("-","")
     db = DB(
             host="localhost",
-            user=site,
+            user=stripname,
             password="nebula",
-            database="nebula_{}".format(site)
+            database="nebula_{}".format(stripname)
         )
     db.query("SELECT id, settings FROM storages")
     for id_storage, settings in db.fetchall():

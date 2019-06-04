@@ -49,8 +49,9 @@ function create_db {
     fi
     site_name=$1
 
-    db_name="nebula_${site_name}"
-    db_user="${site_name}"
+    stripname=$(echo ${site_name} | sed s/\-//g)
+    db_name="nebula_${stripname}"
+    db_user="${stripname}"
     db_pass="nebula"
 
     echo "Checking user $db_user"
@@ -74,8 +75,9 @@ function setup_nebula {
     tpl_dir=$base_dir/sites/$site_name/template
     tgt_dir=/opt/nebula-setup/template
 
-    db_name="nebula_${site_name}"
-    db_user="${site_name}"
+    stripname=$(echo ${site_name} | sed s/\-//g)
+    db_name="nebula_${stripname}"
+    db_user="${stripname}"
     db_pass="nebula"
 
     if [ -L $tgt_dir ]; then
@@ -101,8 +103,9 @@ function create_machines {
     site_name=$1
     source_machines_dir=$base_dir/sites/$site_name/machines
 
-    db_name="nebula_${site_name}"
-    db_user="${site_name}"
+    stripname=$(echo ${site_name} | sed s/\-//g)
+    db_name="nebula_${stripname}"
+    db_user="${stripname}"
     db_pass="nebula"
     db_host=${host_ip}
 
