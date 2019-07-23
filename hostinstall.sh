@@ -15,6 +15,8 @@ function install_base {
         vim \
         aptitude \
         dirmngr \
+        dnsmasq \
+        rsync \
         apt-transport-https \
         python3 \
         python3-pip \
@@ -22,6 +24,8 @@ function install_base {
         python3-dev \
         build-essential \
         linux-headers-$(uname -r) || return 1
+
+    echo "addn-hosts=/var/nebula-cloud/hosts" > /etc/dnsmasq.d/nebula-cloud.conf
 
     pip3 install pylibmc psutil psycopg2-binary pyyaml requests || return 1
 }
@@ -67,13 +71,13 @@ function install_virtualbox {
     wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | apt-key add - || return 1
     echo "deb https://download.virtualbox.org/virtualbox/debian $debian_version contrib" > /etc/apt/sources.list.d/virtualbox.list
     apt update || return 1
-    apt -y install virtualbox-5.2 || return 1
+    apt -y install virtualbox-6.0 || return 1
     /sbin/vboxconfig || return 1
 }
 
 
 function install_vagrant {
-    vagrant_url="https://releases.hashicorp.com/vagrant/2.2.0/vagrant_2.2.0_x86_64.deb" || return 1
+    vagrant_url="https://releases.hashicorp.com/vagrant/2.2.5/vagrant_2.2.5_x86_64.deb" || return 1
     vagrant_path="/tmp/vagrant.deb"
     if [ ! -f $vagrant_path ]; then
         rm $vagrant_path

@@ -10,7 +10,7 @@ Vagrant.configure(2) do |config|
     config.vm.define HOSTNAME
     config.vm.network "public_network", ip: IP
 
-    config.vm.box = "debian/stretch64"
+    config.vm.box = "debian/buster64"
 
     config.vm.provider "virtualbox" do |vb|
         vb.name = HOSTNAME
