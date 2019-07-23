@@ -1,0 +1,22 @@
+#!/bin/bash
+
+site_name=$1
+host_name=$2
+
+
+cwd=$(pwd)
+machine_dir="/var/nebula-cloud/$site_name/$host_name"
+
+if [ -d $machine_dir ]; then
+    if [ ! -f $machine_dir/ssh-config ]; then
+        cd $machine_dir
+        vagrant ssh-config > ssh-config
+        cd $cwd
+    fi
+
+    ssh -t -F $machine_dir/ssh-config $host_name "sudo su -"
+else
+    echo "No such machine"
+fi
+
+
