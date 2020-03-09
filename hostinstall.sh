@@ -1,4 +1,4 @@
-#!/bin/bash
+#/bin/bash
 
 source settings.sh
 source common.sh
@@ -71,13 +71,13 @@ function install_virtualbox {
     wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | apt-key add - || return 1
     echo "deb https://download.virtualbox.org/virtualbox/debian $debian_version contrib" > /etc/apt/sources.list.d/virtualbox.list
     apt update || return 1
-    apt -y install virtualbox-6.0 || return 1
+    apt -y install virtualbox-6.1 || return 1
     /sbin/vboxconfig || return 1
 }
 
 
 function install_vagrant {
-    vagrant_url="https://releases.hashicorp.com/vagrant/2.2.5/vagrant_2.2.5_x86_64.deb" || return 1
+    vagrant_url="https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_x86_64.deb" || return 1
     vagrant_path="/tmp/vagrant.deb"
     if [ ! -f $vagrant_path ]; then
         rm $vagrant_path
@@ -105,6 +105,7 @@ function install_postgres {
         postgresql-contrib-11 || return 1
 
     echo "SHELL=/bin/bash" > /etc/cron.d/db_backup
+    echo "MAILTO=\"\"" >> /etc/cron.d/db_backup
     echo "PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin" >> /etc/cron.d/db_backup
     echo "0 */6 * * * root /opt/nebula-cloud/db_backup.sh" >> /etc/cron.d/db_backup
 
@@ -131,7 +132,7 @@ function install_nginx {
         git clone https://github.com/immstudios/installers || return 1
         cd installers
     fi
-    ./install.nginx.sh || return 1
+    ./install.nginx.sh  --with-upload || return 1
 
     rm -rf /var/www/default
     ln -s $base_dir/support/www /var/www/nebula-cloud
